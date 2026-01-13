@@ -40,6 +40,45 @@
 - Выход из профиля
 
 Юзеры: Гость, Пользователь
+```mermaid
+graph LR
+    subgraph WebUI["Web-интерфейс"]
+        Guest["👤 Гость"]
+        User["👤 Пользователь"]
+        
+        ViewSchema["Просмотр схемы"]
+        Auth["Авторизация / Регистрация"]
+        
+        Import["Импортировать проект"]
+        ViewSchemaUser["Просматривать схему"]
+        ChangeParams["Изменять параметры"]
+        DeleteElements["Удалять элементы"]
+        MoveElements["Перемещать элементы"]
+        RunCalc["Запустить расчёт"]
+        GetResult["Получение результата"]
+        ViewStatus["Просматривать статус"]
+        GetResults["Получить результаты"]
+        Save["Сохранять изменения"]
+        Logout["Выход из профиля"]
+        
+        Guest --> ViewSchema
+        Guest --> Auth
+        
+        User --> Import
+        User --> ViewSchemaUser
+        User --> ChangeParams
+        User --> DeleteElements
+        User --> MoveElements
+        User --> RunCalc
+        User --> ViewStatus
+        User --> GetResults
+        User --> Save
+        User --> Logout
+        
+        RunCalc --> GetResult
+    end
+
+```
 
 ## Дизайн
 
