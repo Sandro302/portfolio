@@ -306,9 +306,9 @@ sequenceDiagram
 
 ---
 
-!(https://github.com/Sandro302/portfolio/raw/main/TZ/image-2.png)
+![](https://github.com/Sandro302/portfolio/raw/main/TZ/image-2.png)
 
-!(https://github.com/Sandro302/portfolio/raw/main/TZ/image-3.png)
+![](https://github.com/Sandro302/portfolio/raw/main/TZ/image-3.png)
 
 **Источник:** Яндекс Вики - ТЗ для FrontEnd
 **Дата:** 29 мая 2025
