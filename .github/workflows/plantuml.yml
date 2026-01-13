@@ -25,73 +25,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y graphviz
 
-     name: Generate PlantUML diagrams
-
-on:
-  push:
-    paths:
-      - '**.puml'
-  workflow_dispatch:
-
-jobs:
-  generate:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Java (for PlantUML)
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install Graphviz (dot)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y graphviz
-
-      name: Generate PlantUML diagrams
-
-on:
-  push:
-    paths:
-      - '**.puml'
-  workflow_dispatch:
-
-jobs:
-  generate:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Java (for PlantUML)
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install Graphviz (dot)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y graphviz
-
       - name: Download PlantUML jar
         run: |
           curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
-
-      - name: Generate PNG from all .puml
-        run: |
-          find . -name "*.puml" -print0 | xargs -0 -n1 -I{} \
-            java -jar plantuml.jar -tpng "{}"
-
-      - name: Generate PNG from all .puml
-        run: |
-          find . -name "*.puml" -print0 | xargs -0 -n1 -I{} \
-            java -jar plantuml.jar -tpng "{}"
 
       - name: Generate PNG from all .puml
         run: |
