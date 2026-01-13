@@ -19,7 +19,9 @@ REST API для системы расчёта и визуализации пар
 ## 📖 Быстрый обзор
 
 ### Base URL
-https://api.example.com/v1
+```bash
+curl -X POST https://api.example.com/v1/projects
+```
 
 
 ### Основные эндпоинты
@@ -111,3 +113,13 @@ API использует асинхронный паттерн для длите
 Webhooks — уведомления при завершении
 
 Status polling — проверка статуса
+
+
+***
+
+## **Коммит:**
+
+```bash
+git add 06_API_Specification/README.md
+git commit -m "docs: fix API README formatting and links"
+git push origin main
