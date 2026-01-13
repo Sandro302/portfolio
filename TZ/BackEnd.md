@@ -25,6 +25,38 @@
 
 Основная диаграмма взаимодействия компонентов:
 
+```meimaid
+@startuml
+scale 1.5
+skinparam defaultFontSize 16
+skinparam sequenceParticipantFontSize 14
+skinparam sequenceMessageFontSize 14
+skinparam sequenceGroupFontSize 13
+
+actor Пользователь
+participant Frontend
+participant Backend
+database БазаДанных
+autonumber
+
+== Импорт проекта ==
+
+Пользователь -> Frontend : Загружает файлы .opi/.tpl/.tab
+activate Frontend
+Frontend -> Backend : POST /projects/import (multipart)
+activate Backend
+Backend -> Backend : Валидация структуры
+Backend -> БазаДанных : Сохранение информации о проекте
+activate БазаДанных
+БазаДанных --> Backend : OK
+deactivate БазаДанных
+Backend --> Frontend : 201 Created + projectId
+deactivate Backend
+Frontend --> Пользователь : Уведомление об успешном импорте
+deactivate Frontend
+@enduml
+```
+
 ### Импорт проекта
 
 - Пользователь загружает файлы `.opi/.tpl/.tab`
