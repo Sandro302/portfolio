@@ -81,7 +81,7 @@ graph LR
 ```
 
 ## Дизайн
-
+![Дизайн приложения](https://github.com/Sandro302/portfolio/raw/main/TZ/image.png)
 ### Стиль
 
 - Минималистичный интерфейс
