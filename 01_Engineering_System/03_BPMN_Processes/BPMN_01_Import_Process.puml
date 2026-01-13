@@ -1,0 +1,38 @@
+@startuml
+' Import OLGA Project Process (логический BPMN-эквивалент)
+
+!define RECTANGLE class
+
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+  RoundCorner 10
+}
+
+skinparam ArrowColor Black
+skinparam DefaultTextAlignment center
+
+title "Import OLGA Project Process"
+
+RECTANGLE "Engineer" as Engineer
+RECTANGLE "Calculation System\n(UI + API)" as System
+RECTANGLE "OLGA Files\n(Storage)" as OLGA
+RECTANGLE "Database\n(PostgreSQL)" as DB
+RECTANGLE "Import Service" as ImportSvc
+
+Engineer -down-> System : Select \"Import OLGA Project\"
+System -down-> Engineer : Show file selection dialog
+Engineer -down-> System : Choose OLGA project files
+
+System -right-> ImportSvc : Upload files\n+ metadata (name, description)
+ImportSvc -right-> OLGA : Read OLGA files\n(validate structure/version)
+
+ImportSvc -down-> ImportSvc : Parse entities\n(nodes, pipes, profiles,\nparameters)
+ImportSvc -right-> DB : Save project\nand topology data
+
+ImportSvc -left-> DB : Write import log\n(status, message, timestamps)
+
+ImportSvc -up-> System : Import result\n(success / warnings / errors)
+System -up-> Engineer : Show import status\n+ list of warnings/errors
+
+@enduml
