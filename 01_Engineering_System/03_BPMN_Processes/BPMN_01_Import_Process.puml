@@ -1,38 +1,47 @@
 @startuml
-' Import OLGA Project Process (логический BPMN-эквивалент)
-
-!define RECTANGLE class
-
-skinparam rectangle {
-  BackgroundColor White
-  BorderColor Black
-  RoundCorner 10
+skinparam {
+    backgroundColor #FFFFFF
+    ParticipantBorderColor #333333
+    ParticipantBackgroundColor #E8F4F8
+    ArrowColor #333333
+    fontSize 12
 }
 
-skinparam ArrowColor Black
-skinparam DefaultTextAlignment center
+title Import OLGA Project Process
 
-title "Import OLGA Project Process"
+actor Engineer
+participant "Calculation System\n(UI + API)" as CalcSys
+participant "Import Service" as ImportSvc
+database "Database\n(PostgreSQL)" as DB
+participant "OLGA Files\n(Storage)" as Storage
 
-RECTANGLE "Engineer" as Engineer
-RECTANGLE "Calculation System\n(UI + API)" as System
-RECTANGLE "OLGA Files\n(Storage)" as OLGA
-RECTANGLE "Database\n(PostgreSQL)" as DB
-RECTANGLE "Import Service" as ImportSvc
+Engineer -> CalcSys : Select "Import OLGA Project"
+Engineer -> CalcSys : Show file selection dialog
+Engineer -> CalcSys : Choose OLGA project files
+Activate CalcSys
 
-Engineer -down-> System : Select \"Import OLGA Project\"
-System -down-> Engineer : Show file selection dialog
-Engineer -down-> System : Choose OLGA project files
+CalcSys -> ImportSvc : Upload files + metadata\n(name, description)
+Activate ImportSvc
 
-System -right-> ImportSvc : Upload files\n+ metadata (name, description)
-ImportSvc -right-> OLGA : Read OLGA files\n(validate structure/version)
+ImportSvc -> ImportSvc : Parse entities\n(nodes, pipes, profiles)
+ImportSvc -> ImportSvc : Validate structure/version
+ImportSvc -> ImportSvc : Write import log\n(status, message, timestamp)
 
-ImportSvc -down-> ImportSvc : Parse entities\n(nodes, pipes, profiles,\nparameters)
-ImportSvc -right-> DB : Save project\nand topology data
+ImportSvc -> Storage : Read OLGA files\n(validate structure/version)
+Activate Storage
+Storage --> ImportSvc : Read complete
+Deactivate Storage
 
-ImportSvc -left-> DB : Write import log\n(status, message, timestamps)
+ImportSvc -> DB : Save project and\ntopology data
+Activate DB
+DB --> ImportSvc : Save complete
+Deactivate DB
 
-ImportSvc -up-> System : Import result\n(success / warnings / errors)
-System -up-> Engineer : Show import status\n+ list of warnings/errors
+ImportSvc -> Storage : Save parsed data
+ImportSvc --> CalcSys : Import result\n(success / warnings / errors)
+Deactivate ImportSvc
+
+CalcSys --> Engineer : Show import status\nlist of warnings/errors
+Deactivate CalcSys
 
 @enduml
