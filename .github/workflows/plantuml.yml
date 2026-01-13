@@ -28,8 +28,12 @@ jobs:
       - name: Download PlantUML jar
         run: |
           curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
-
+      
       - name: Generate PNG from all .puml
         run: |
-          find . -name "*.puml" -print0 | xargs -0 -n1 -I{} \
-            java -jar plantuml.jar -tpng "{}"
+          echo "Found .puml files:"
+          find . -name "*.puml" -print
+          find . -name "*.puml" -print0 | while IFS= read -r -d '' file; do
+            echo "Rendering $file"
+            java -jar plantuml.jar -tpng "$file"
+          done
