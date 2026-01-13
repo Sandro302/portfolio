@@ -26,35 +26,38 @@
 Основная диаграмма взаимодействия компонентов:
 
 ```mermaid
-@startuml
-scale 1.5
-skinparam defaultFontSize 16
-skinparam sequenceParticipantFontSize 14
-skinparam sequenceMessageFontSize 14
-skinparam sequenceGroupFontSize 13
+sequenceDiagram
+    actor User as Пользователь
+    participant Frontend
+    participant Backend
+    participant DB as БазаДанных
+    
+    autonumber
+    
+    rect rgb(200, 220, 255)
+    Note over User,DB: Импорт проекта
+    end
+    
+    User->>Frontend: Загружает файлы .opi/.tpl/.tab
+    activate Frontend
+    
+    Frontend->>Backend: POST /projects/import (multipart)
+    activate Backend
+    
+    Backend->>Backend: Валидация структуры
+    
+    Backend->>DB: Сохранение информации о проекте
+    activate DB
+    
+    DB-->>Backend: OK
+    deactivate DB
+    
+    Backend-->>Frontend: 201 Created + projectId
+    deactivate Backend
+    
+    Frontend-->>User: Уведомление об успешном импорте
+    deactivate Frontend
 
-actor Пользователь
-participant Frontend
-participant Backend
-database БазаДанных
-autonumber
-
-== Импорт проекта ==
-
-Пользователь -> Frontend : Загружает файлы .opi/.tpl/.tab
-activate Frontend
-Frontend -> Backend : POST /projects/import (multipart)
-activate Backend
-Backend -> Backend : Валидация структуры
-Backend -> БазаДанных : Сохранение информации о проекте
-activate БазаДанных
-БазаДанных --> Backend : OK
-deactivate БазаДанных
-Backend --> Frontend : 201 Created + projectId
-deactivate Backend
-Frontend --> Пользователь : Уведомление об успешном импорте
-deactivate Frontend
-@enduml
 ```
 
 ### Импорт проекта
