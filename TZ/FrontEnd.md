@@ -152,7 +152,8 @@ graph LR
 - Если `.tpl` найден — импорт продолжается
 - Если не найден — frontend отображает сообщение «Файл .tpl не найден» и предлагает загрузить вручную
 
-###Диаграмма
+### Диаграмма
+
 ```mermaid
 sequenceDiagram
     actor User as Пользователь
@@ -174,17 +175,23 @@ sequenceDiagram
     
     Backend->>Backend: Валидация структуры
     
-    Backend->>DB: Сохранение информации о проекте
-    activate DB
+    alt Валидация успешна
+        Backend->>DB: Сохранение информации о проекте
+        activate DB
+        
+        DB-->>Backend: OK
+        deactivate DB
+        
+        Backend-->>Frontend: 201 Created + projectId
+    else Ошибка валидации
+        Backend-->>Frontend: 400 Bad Request
+    end
     
-    DB-->>Backend: OK
-    deactivate DB
-    
-    Backend-->>Frontend: 201 Created + projectId
     deactivate Backend
     
-    Frontend-->>User: Уведомление об успешном импорте
+    Frontend-->>User: Уведомление об результате
     deactivate Frontend
+
 ```
 
 ### Запуск расчета
@@ -217,40 +224,71 @@ sequenceDiagram
 - При следующем входе UI проверяет статус расчёта и предлагает повторный запуск
 - UI показывает таблицу или график с результатами
 
-###Диаграмма
+### Диаграмма
 
 ```mermaid
-@startuml
-== Запуск расчёта (асинхронный) ==
+sequenceDiagram
+    actor User as Пользователь
+    participant Frontend
+    participant Backend
+    participant Orchestrator as Оркестратор
+    participant Kafka
+    participant CalcModule as МодульРасчёта
+    participant DB as БазаДанных
+    participant WebUI as Web-интерфейс
+    
+    autonumber
+    
+    rect rgb(200, 220, 255)
+    Note over User,WebUI: Запуск расчёта (асинхронный)
+    end
+    
+    User->>Frontend: Нажимает "Запустить расчёт"
+    activate Frontend
+    
+    Frontend->>Backend: POST /projects/{id}/run
+    activate Backend
+    
+    Backend->>Orchestrator: отправка задачи
+    activate Orchestrator
+    
+    Orchestrator->>Kafka: publish calculationRequested
+    deactivate Orchestrator
+    
+    Backend-->>Frontend: 202 Accepted
+    deactivate Backend
+    
+    Frontend-->>User: Расчёт поставлен в очередь
+    deactivate Frontend
+    
+    rect rgb(220, 200, 220)
+    Note over Kafka,DB: Асинхронная обработка
+    end
+    
+    Kafka->>CalcModule: consume calculationRequested
+    activate CalcModule
+    
+    CalcModule->>CalcModule: Выполнение итераций
+    
+    CalcModule->>DB: Сохранение результатов
+    activate DB
+    
+    DB-->>CalcModule: OK
+    deactivate DB
+    
+    CalcModule->>Kafka: publish calculationFinished
+    deactivate CalcModule
+    
+    rect rgb(200, 255, 200)
+    Note over Kafka,WebUI: Обратная связь
+    end
+    
+    Kafka-->>WebUI: consume calculationFinished
+    activate WebUI
+    
+    WebUI-->>User: Расчёт завершён, результат готов
+    deactivate WebUI
 
-Пользователь -> Frontend : Нажимает "Запустить расчёт"
-activate Frontend
-Frontend -> Backend : POST /projects/{id}/run
-activate Backend
-Backend -> Оркестратор : отправка задачи
-activate Оркестратор
-Оркестратор -> Kafka : publish calculationRequested
-deactivate Оркестратор
-Backend --> Frontend : 202 Accepted
-deactivate Backend
-Frontend --> Пользователь : Расчёт поставлен в очередь
-deactivate Frontend
-
-== Асинхронная обработка ==
-
-Kafka -> МодульРасчёта : consume calculationRequested
-activate МодульРасчёта
-МодульРасчёта -> МодульРасчёта : Выполнение итераций
-МодульРасчёта -> БазаДанных : Сохранение результатов
-БазаДанных --> МодульРасчёта : OK
-МодульРасчёта -> Kafka : publish calculationFinished
-deactivate МодульРасчёта
-
-== Обратная связь ==
-
-Kafka --> "Web-интерфейс" : consume calculationFinished
-"Web-интерфейс" --> Пользователь : Расчёт завершён, результат готов
-@enduml
 ```
 
 ## UC (Use Case как описание экранной формы)
@@ -268,9 +306,9 @@ Kafka --> "Web-интерфейс" : consume calculationFinished
 
 ---
 
-(https://github.com/Sandro302/portfolio/raw/main/TZ/image2.png)
+![](https://github.com/Sandro302/portfolio/raw/main/TZ/image2.png)
 
-(https://github.com/Sandro302/portfolio/raw/main/TZ/image3.png)
+![](https://github.com/Sandro302/portfolio/raw/main/TZ/image3.png)
 
 **Источник:** Яндекс Вики - ТЗ для FrontEnd
 **Дата:** 29 мая 2025
