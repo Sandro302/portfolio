@@ -1,51 +1,24 @@
 ## Import OLGA Project (sequence)
 
-```plantuml
-@startuml
-skinparam {
-    backgroundColor #FFFFFF
-    ParticipantBorderColor #333333
-    ParticipantBackgroundColor #E8F4F8
-    ArrowColor #333333
-    fontSize 12
-}
+```mermaid
+sequenceDiagram
+    actor Engineer
+    participant CalcSys as "Calculation System\n(UI + API)"
+    participant ImportSvc as "Import Service"
+    participant DB as "Database\n(PostgreSQL)"
+    participant Storage as "OLGA Files\n(Storage)"
 
-title Import OLGA Project Process
+    Engineer->>CalcSys: Select "Import OLGA Project"
+    CalcSys-->>Engineer: Show file selection dialog
+    Engineer->>CalcSys: Choose OLGA project files
 
-actor Engineer
-participant "Calculation System\n(UI + API)" as CalcSys
-participant "Import Service" as ImportSvc
-database "Database\n(PostgreSQL)" as DB
-participant "OLGA Files\n(Storage)" as Storage
+    CalcSys->>ImportSvc: Upload files + metadata\n(name, description)
+    ImportSvc->>ImportSvc: Parse & validate\nentities + structure
+    ImportSvc->>Storage: Read OLGA files
+    Storage-->>ImportSvc: Read complete
 
-Engineer -> CalcSys : Select "Import OLGA Project"
-Engineer -> CalcSys : Show file selection dialog
-Engineer -> CalcSys : Choose OLGA project files
-activate CalcSys
+    ImportSvc->>DB: Save project & topology
+    DB-->>ImportSvc: Save complete
 
-CalcSys -> ImportSvc : Upload files + metadata\n(name, description)
-activate ImportSvc
-
-ImportSvc -> ImportSvc : Parse entities\n(nodes, pipes, profiles)
-ImportSvc -> ImportSvc : Validate structure/version
-ImportSvc -> ImportSvc : Write import log\n(status, message, timestamp)
-
-ImportSvc -> Storage : Read OLGA files\n(validate structure/version)
-activate Storage
-Storage --> ImportSvc : Read complete
-deactivate Storage
-
-ImportSvc -> DB : Save project and\ntopology data
-activate DB
-DB --> ImportSvc : Save complete
-deactivate DB
-
-ImportSvc -> Storage : Save parsed data
-ImportSvc --> CalcSys : Import result\n(success / warnings / errors)
-deactivate ImportSvc
-
-CalcSys --> Engineer : Show import status\nlist of warnings/errors
-deactivate CalcSys
-
-@enduml
-
+    ImportSvc-->>CalcSys: Import result\n(success / warnings / errors)
+    CalcSys-->>Engineer: Show status\n+ warnings/errors
