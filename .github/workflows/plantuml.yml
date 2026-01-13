@@ -3,15 +3,12 @@ name: Generate PlantUML diagrams
 on:
   push:
     paths:
-      - '**.puml'        # запускать, когда меняются puml
-  workflow_dispatch:      # возможность запустить руками из Actions
+      - '**.puml'
+  workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write     # нужно, чтобы запушить сгенерированные картинки
 
     steps:
       - name: Checkout repo
@@ -36,10 +33,3 @@ jobs:
         run: |
           find . -name "*.puml" -print0 | xargs -0 -n1 -I{} \
             java -jar plantuml.jar -tpng "{}"
-        # plantuml создаст PNG рядом с каждым .puml
-
-      - name: Commit and push diagrams
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update PlantUML diagrams"
-          file_pattern: "*.png"
