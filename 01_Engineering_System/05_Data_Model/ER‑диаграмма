@@ -1,0 +1,122 @@
+@startuml
+' ER‑diagram for Engineering Pipeline Calculation System
+
+hide circle
+skinparam linetype ortho
+
+entity "PROJECTS" as PROJECTS {
+  * id : UUID <<PK>>
+  --
+  name : varchar(255)
+  description : text
+  status : varchar(32)
+  created_at : timestamptz
+  updated_at : timestamptz
+}
+
+entity "NODES" as NODES {
+  * id : UUID <<PK>>
+  --
+  project_id : UUID <<FK>>
+  code : varchar(64)
+  name : varchar(255)
+  node_type : varchar(32)
+  elevation_m : numeric(10,3)
+  created_at : timestamptz
+  updated_at : timestamptz
+}
+
+entity "PIPES" as PIPES {
+  * id : UUID <<PK>>
+  --
+  project_id : UUID <<FK>>
+  from_node_id : UUID <<FK>>
+  to_node_id : UUID <<FK>>
+  code : varchar(64)
+  name : varchar(255)
+  length_m : numeric(12,3)
+  internal_diameter_m : numeric(10,4)
+  roughness_m : numeric(10,6)
+  created_at : timestamptz
+  updated_at : timestamptz
+}
+
+entity "CALCULATIONS" as CALCULATIONS {
+  * id : UUID <<PK>>
+  --
+  project_id : UUID <<FK>>
+  status : varchar(32)
+  started_at : timestamptz
+  finished_at : timestamptz
+  template_id : UUID <<FK>> <<nullable>>
+  parameters_json : jsonb
+  error_message : text
+  created_at : timestamptz
+  updated_at : timestamptz
+}
+
+entity "CALCULATION_RESULTS" as CALCULATION_RESULTS {
+  * id : UUID <<PK>>
+  --
+  calculation_id : UUID <<FK>>
+  node_id : UUID <<FK>>
+  segment_id : UUID <<FK>> <<nullable>>
+  pressure_pa : numeric(18,4)
+  temperature_k : numeric(18,4)
+  flow_rate_kg_s : numeric(18,6)
+  additional_json : jsonb
+  created_at : timestamptz
+}
+
+entity "TEMPLATES" as TEMPLATES {
+  * id : UUID <<PK>>
+  --
+  project_id : UUID <<FK>>
+  name : varchar(255)
+  description : text
+  parameters_json : jsonb
+  is_default : boolean
+  created_at : timestamptz
+  updated_at : timestamptz
+}
+
+entity "IMPORT_LOGS" as IMPORT_LOGS {
+  * id : UUID <<PK>>
+  --
+  project_id : UUID <<FK>>
+  source_system : varchar(64)
+  status : varchar(32)
+  message : text
+  started_at : timestamptz
+  finished_at : timestamptz
+  created_at : timestamptz
+}
+
+entity "ERROR_LOGS" as ERROR_LOGS {
+  * id : UUID <<PK>>
+  --
+  project_id : UUID <<FK>> <<nullable>>
+  calculation_id : UUID <<FK>> <<nullable>>
+  severity : varchar(16)
+  code : varchar(64)
+  message : text
+  context_json : jsonb
+  created_at : timestamptz
+}
+
+PROJECTS ||--o{ NODES : "has"
+PROJECTS ||--o{ PIPES : "has"
+PROJECTS ||--o{ CALCULATIONS : "has"
+PROJECTS ||--o{ TEMPLATES : "has"
+PROJECTS ||--o{ IMPORT_LOGS : "has"
+PROJECTS ||--o{ ERROR_LOGS : "has (optional)"
+
+NODES ||--o{ PIPES : "as from_node"
+NODES ||--o{ PIPES : "as to_node"
+
+CALCULATIONS ||--o{ CALCULATION_RESULTS : "produces"
+NODES ||--o{ CALCULATION_RESULTS : "has results"
+PIPES ||--o{ CALCULATION_RESULTS : "has segment results"
+
+TEMPLATES ||--o{ CALCULATIONS : "used by (optional)"
+@enduml
