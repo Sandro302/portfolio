@@ -1,0 +1,39 @@
+@startuml
+' Export Results Process
+
+!define RECTANGLE class
+
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+  RoundCorner 10
+}
+
+skinparam ArrowColor Black
+skinparam DefaultTextAlignment center
+
+title "Export Calculation Results to CSV"
+
+RECTANGLE "Engineer" as Engineer
+RECTANGLE "UI / Client" as UI
+RECTANGLE "API Gateway" as API
+RECTANGLE "Export Service" as ExportSvc
+RECTANGLE "Database\n(PostgreSQL)" as DB
+RECTANGLE "File Storage\n(optional)" as FS
+
+Engineer -down-> UI : Open project results
+Engineer -down-> UI : Click \"Export to CSV\"
+
+UI -right-> API : POST /projects/{id}/export\n(format = csv)
+API -down-> ExportSvc : Start export job\n(projectId, calculationId?)
+
+ExportSvc -down-> DB : Load latest successful\ncalculation results
+ExportSvc -down-> ExportSvc : Transform to tabular\nstructure (per node/segment)
+ExportSvc -right-> FS : (optional) Save CSV file
+
+ExportSvc -up-> API : CSV stream\n(or signed URL if FS used)
+API -up-> UI : Response with file\n(or download link)
+
+UI -up-> Engineer : Download CSV file
+
+@enduml
