@@ -49,4 +49,3 @@ deactivate CalcSys
 
 @enduml
 
-<img width="880" height="788" alt="image" src="https://github.com/user-attachments/assets/ad2ed16b-dd43-4e4d-945e-3e5cbed2f6c6" />
