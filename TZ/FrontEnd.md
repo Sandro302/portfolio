@@ -152,6 +152,41 @@ graph LR
 - Если `.tpl` найден — импорт продолжается
 - Если не найден — frontend отображает сообщение «Файл .tpl не найден» и предлагает загрузить вручную
 
+###Диаграмма
+```mermaid
+sequenceDiagram
+    actor User as Пользователь
+    participant Frontend
+    participant Backend
+    participant DB as БазаДанных
+    
+    autonumber
+    
+    rect rgb(200, 220, 255)
+    Note over User,DB: Импорт проекта
+    end
+    
+    User->>Frontend: Загружает файлы .opi/.tpl/.tab
+    activate Frontend
+    
+    Frontend->>Backend: POST /projects/import (multipart)
+    activate Backend
+    
+    Backend->>Backend: Валидация структуры
+    
+    Backend->>DB: Сохранение информации о проекте
+    activate DB
+    
+    DB-->>Backend: OK
+    deactivate DB
+    
+    Backend-->>Frontend: 201 Created + projectId
+    deactivate Backend
+    
+    Frontend-->>User: Уведомление об успешном импорте
+    deactivate Frontend
+```
+
 ### Запуск расчета
 
 | Поле | Описание |
@@ -182,6 +217,42 @@ graph LR
 - При следующем входе UI проверяет статус расчёта и предлагает повторный запуск
 - UI показывает таблицу или график с результатами
 
+###Диаграмма
+
+```mermaid
+@startuml
+== Запуск расчёта (асинхронный) ==
+
+Пользователь -> Frontend : Нажимает "Запустить расчёт"
+activate Frontend
+Frontend -> Backend : POST /projects/{id}/run
+activate Backend
+Backend -> Оркестратор : отправка задачи
+activate Оркестратор
+Оркестратор -> Kafka : publish calculationRequested
+deactivate Оркестратор
+Backend --> Frontend : 202 Accepted
+deactivate Backend
+Frontend --> Пользователь : Расчёт поставлен в очередь
+deactivate Frontend
+
+== Асинхронная обработка ==
+
+Kafka -> МодульРасчёта : consume calculationRequested
+activate МодульРасчёта
+МодульРасчёта -> МодульРасчёта : Выполнение итераций
+МодульРасчёта -> БазаДанных : Сохранение результатов
+БазаДанных --> МодульРасчёта : OK
+МодульРасчёта -> Kafka : publish calculationFinished
+deactivate МодульРасчёта
+
+== Обратная связь ==
+
+Kafka --> "Web-интерфейс" : consume calculationFinished
+"Web-интерфейс" --> Пользователь : Расчёт завершён, результат готов
+@enduml
+```
+
 ## UC (Use Case как описание экранной формы)
 
 ### Главный экран проекта
@@ -196,6 +267,10 @@ graph LR
 | 6 | Результаты | Отображает таблицу и графики с результатами расчёта | API: /results | `Скрыт` / `Отображён` / `Пусто` / `Ошибка` |
 
 ---
+
+(https://github.com/Sandro302/portfolio/raw/main/TZ/image2.png)
+
+(https://github.com/Sandro302/portfolio/raw/main/TZ/image3.png)
 
 **Источник:** Яндекс Вики - ТЗ для FrontEnd
 **Дата:** 29 мая 2025
