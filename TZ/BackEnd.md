@@ -59,6 +59,70 @@ sequenceDiagram
     deactivate Frontend
 
 ```
+```mermaid
+sequenceDiagram
+    actor User as Пользователь
+    participant Frontend
+    participant Backend
+    participant Orchestrator as Оркестратор
+    participant Kafka
+    participant CalcModule as МодульРасчёта
+    participant DB as БазаДанных
+    participant WebUI as Web-интерфейс
+    
+    rect rgb(200, 220, 255)
+    Note over User,WebUI: Запуск расчёта (асинхронный)
+    end
+    
+    User->>Frontend: Нажимает "Запустить расчёт"
+    activate Frontend
+    
+    Frontend->>Backend: POST /projects/{id}/run
+    activate Backend
+    
+    Backend->>Orchestrator: Отправка задачи
+    activate Orchestrator
+    
+    Orchestrator->>Kafka: publish calculationRequested
+    activate Kafka
+    deactivate Orchestrator
+    
+    Backend-->>Frontend: 202 Accepted
+    deactivate Backend
+    
+    Frontend-->>User: Расчёт поставлен в очередь
+    deactivate Frontend
+    
+    rect rgb(220, 200, 220)
+    Note over Kafka,DB: Асинхронная обработка
+    end
+    
+    Kafka->>CalcModule: consume calculationRequested
+    activate CalcModule
+    
+    CalcModule->>CalcModule: Выполнение итераций
+    
+    CalcModule->>DB: Сохранение результатов
+    activate DB
+    
+    DB-->>CalcModule: OK
+    deactivate DB
+    
+    CalcModule->>Kafka: publish calculationFinished
+    
+    rect rgb(200, 255, 200)
+    Note over Kafka,WebUI: Обратная связь
+    end
+    
+    Kafka->>WebUI: consume calculationFinished
+    deactivate Kafka
+    activate WebUI
+    
+    WebUI-->>User: Расчёт завершён, результат готов
+    deactivate WebUI
+    deactivate CalcModule
+
+```
 
 ### Импорт проекта
 
