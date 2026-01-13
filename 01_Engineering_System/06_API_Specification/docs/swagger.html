@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engineering Pipeline API - Swagger UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-standalone.min.css">
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            background: #fafafa;
+            font-family: sans-serif;
+            padding: 0;
+        }
+
+        .topbar {
+            background-color: #263238;
+            padding: 10px 0;
+            color: white;
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar p {
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .nav-tabs {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 20px;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tabs a {
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs a:hover {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .nav-tabs a.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        #swagger-ui {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <h1>🚀 Engineering Pipeline API</h1>
+        <p>REST API для системы расчёта и визуализации параметров трубопровода</p>
+    </div>
+
+    <div class="nav-tabs">
+        <a onclick="showSwagger()" class="active" id="swagger-tab">📖 Swagger UI (Try It)</a>
+        <a onclick="showRedoc()" id="redoc-tab">📚 ReDoc (Read)</a>
+    </div>
+
+    <div id="swagger-ui"></div>
+    <div id="redoc-container" style="display:none;"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-standalone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/redoc@latest/bundles/redoc.standalone.js"></script>
+
+    <script>
+        let swaggerUI;
+        let redocInstance;
+
+        function initSwagger() {
+            swaggerUI = SwaggerUIBundle({
+                url: '../openapi.yaml',
+                dom_id: '#swagger-ui',
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.SwaggerUIStandalonePreset
+                ],
+                layout: "BaseLayout",
+                deepLinking: true,
+                defaultModelsExpandDepth: 1,
+                defaultModelExpandDepth: 1
+            });
+        }
+
+        function initRedoc() {
+            Redoc.init('../openapi.yaml', {
+                scrollYOffset: 50
+            }, document.getElementById('redoc-container'));
+        }
+
+        function showSwagger() {
+            document.getElementById('swagger-ui').style.display = 'block';
+            document.getElementById('redoc-container').style.display = 'none';
+            document.getElementById('swagger-tab').classList.add('active');
+            document.getElementById('redoc-tab').classList.remove('active');
+
+            if (!swaggerUI) {
+                initSwagger();
+            }
+        }
+
+        function showRedoc() {
+            document.getElementById('swagger-ui').style.display = 'none';
+            document.getElementById('redoc-container').style.display = 'block';
+            document.getElementById('redoc-tab').classList.add('active');
+            document.getElementById('swagger-tab').classList.remove('active');
+
+            if (!redocInstance) {
+                initRedoc();
+            }
+        }
+
+        // Инициализируем Swagger по умолчанию
+        initSwagger();
+    </script>
+</body>
+</html>
