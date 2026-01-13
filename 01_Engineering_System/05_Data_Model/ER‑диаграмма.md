@@ -107,4 +107,3 @@ erDiagram
     IMPORT_LOGS ||--o{ PROJECTS : "project_id > id"
     ERROR_LOGS ||--o{ PROJECTS : "project_id > id"
     ERROR_LOGS ||--o{ CALCULATIONS : "calculation_id > id"
-```
