@@ -1,4 +1,4 @@
-![Import OLGA Project Process](./01_Engineering_System/03_BPMN_Processes/BPMN_01_Import_Process.png)
+
 # Fullstack Analyst Portfolio
 
 Профессиональное портфолио системного / fullstack аналитика на основе реального инженерного проекта расчёта и визуализации параметров трубопроводной системы.
