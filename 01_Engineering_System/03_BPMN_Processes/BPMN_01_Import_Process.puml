@@ -1,3 +1,6 @@
+## Import OLGA Project (sequence)
+
+```plantuml
 @startuml
 skinparam {
     backgroundColor #FFFFFF
@@ -18,30 +21,30 @@ participant "OLGA Files\n(Storage)" as Storage
 Engineer -> CalcSys : Select "Import OLGA Project"
 Engineer -> CalcSys : Show file selection dialog
 Engineer -> CalcSys : Choose OLGA project files
-Activate CalcSys
+activate CalcSys
 
 CalcSys -> ImportSvc : Upload files + metadata\n(name, description)
-Activate ImportSvc
+activate ImportSvc
 
 ImportSvc -> ImportSvc : Parse entities\n(nodes, pipes, profiles)
 ImportSvc -> ImportSvc : Validate structure/version
 ImportSvc -> ImportSvc : Write import log\n(status, message, timestamp)
 
 ImportSvc -> Storage : Read OLGA files\n(validate structure/version)
-Activate Storage
+activate Storage
 Storage --> ImportSvc : Read complete
-Deactivate Storage
+deactivate Storage
 
 ImportSvc -> DB : Save project and\ntopology data
-Activate DB
+activate DB
 DB --> ImportSvc : Save complete
-Deactivate DB
+deactivate DB
 
 ImportSvc -> Storage : Save parsed data
 ImportSvc --> CalcSys : Import result\n(success / warnings / errors)
-Deactivate ImportSvc
+deactivate ImportSvc
 
 CalcSys --> Engineer : Show import status\nlist of warnings/errors
-Deactivate CalcSys
+deactivate CalcSys
 
 @enduml
