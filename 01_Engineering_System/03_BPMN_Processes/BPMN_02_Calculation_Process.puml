@@ -1,0 +1,47 @@
+@startuml
+' Run Calculation Process (асинхронный)
+
+!define RECTANGLE class
+
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+  RoundCorner 10
+}
+
+skinparam ArrowColor Black
+skinparam DefaultTextAlignment center
+
+title "Run Calculation Process"
+
+RECTANGLE "Engineer" as Engineer
+RECTANGLE "UI / Client" as UI
+RECTANGLE "API Gateway" as API
+RECTANGLE "Calculation Service\n(Python wrapper)" as CalcSvc
+RECTANGLE "Calculation Engine\n(C++)" as Engine
+RECTANGLE "Database\n(PostgreSQL)" as DB
+RECTANGLE "Notification Service" as Notif
+
+Engineer -down-> UI : Configure parameters\nor select template
+Engineer -down-> UI : Click \"Run calculation\"
+
+UI -right-> API : POST /projects/{id}/calculations\n(parameters)
+API -down-> DB : Create CALCULATION row\nstatus = queued
+API -down-> CalcSvc : Enqueue calculation job\n(projectId, calculationId)
+
+CalcSvc -right-> Engine : Run calculation\n(input data snapshot)
+Engine -down-> Engine : Perform numerical\ncalculation
+
+Engine -left-> CalcSvc : Results\n(or error)
+CalcSvc -down-> DB : Store results into\nCALCULATION_RESULTS
+CalcSvc -down-> DB : Update CALCULATIONS\nstatus = completed/failed,\nerror_message if needed
+
+CalcSvc -right-> Notif : Send event\n(calculation.completed / failed)
+Notif -up-> Engineer : Notify via UI/WebSocket
+
+Engineer -up-> UI : Open results screen
+UI -right-> API : GET /projects/{id}/results
+API -down-> DB : Read results
+API -up-> UI : Return structured results
+
+@enduml
