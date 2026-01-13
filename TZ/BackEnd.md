@@ -25,7 +25,7 @@
 
 Основная диаграмма взаимодействия компонентов:
 
-```meimaid
+```mermaid
 @startuml
 scale 1.5
 skinparam defaultFontSize 16
