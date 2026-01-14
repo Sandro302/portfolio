@@ -1,0 +1,3 @@
+- **[🔧 Swagger UI + ReDoc (Комбо)](./full.html)**
+- **[📖 ReDoc](./index.html)**
+- **[🔧 Swagger UI](./swagger.html)**
