@@ -49,3 +49,11 @@ fullstack-analyst-portfolio/
         ├── 08_UI_Mockups/
         ├── 09_Technical_Specification/
         └── 10_Summary/
+
+## 📚 API документация
+
+Полная документация Engineering Pipeline Calculation System API находится в папке [`docs/`](./docs/):
+
+- **[🔧 Swagger UI + ReDoc (Комбо)](./docs/full.html)** — Интерактивное тестирование и документация
+- **[📖 ReDoc](./docs/index.html)** — Красивый просмотр документации
+- **[🔧 Swagger UI](./docs/swagger.html)** — Тестирование эндпоинтов API
