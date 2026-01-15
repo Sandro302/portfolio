@@ -76,6 +76,4 @@
 ├── 05_Data_Model/
 ├── 06_API_Specification/
 ├── 07_System_Architecture/
-├── 08_UI_Mockups/
-├── 09_Technical_Specification/
-└── 10_Summary/
+├── TZ
