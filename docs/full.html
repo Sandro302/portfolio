@@ -93,7 +93,7 @@
       event.target.classList.add('active');
 
       if (tab === 'redoc' && !window.redocLoaded) {
-        Redoc.init('docs/openapi.yaml', {}, document.getElementById('redoc-container'));
+        Redoc.init('openapi.yaml', {}, document.getElementById('redoc-container'));
         window.redocLoaded = true;
       }
     }
