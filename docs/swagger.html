@@ -18,15 +18,15 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-bundle.min.js"></script>
   <script>
-    window.onload = () => {
-      window.ui = SwaggerUIBundle({
-        url: 'docs/openapi.yaml',        // ВАЖНО: путь к твоему openapi.yaml
-        dom_id: '#swagger-ui',
-        layout: 'BaseLayout',
-        deepLinking: true,
-        defaultModelsExpandDepth: 1,
-        defaultModelExpandDepth: 1,
-      });
+window.ui = SwaggerUIBundle({
+  url: 'openapi.yaml',          // файл в той же папке docs
+  dom_id: '#swagger-ui',
+  layout: 'BaseLayout',
+  deepLinking: true,
+  defaultModelsExpandDepth: 1,
+  defaultModelExpandDepth: 1,
+});
+
     };
   </script>
 </body>
