@@ -634,7 +634,7 @@ components:
         target:
           type: string
           description: WebSocket path или URL webhook'а.
-          example: https://example.com/webhooks/calculations
+          example: https://api.example.com/v1
         events:
           type: array
           items:
