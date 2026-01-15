@@ -4,7 +4,7 @@ REST API для системы расчёта и визуализации пар
 
 ## 🚀 Документация
 
-- **[Документация Swagger и ReDoc](https://sandro302.github.io/portfolio/index.html)**
+- **[Документация Swagger и ReDoc](https://sandro302.github.io/portfolio/docs/full.html)**
 
 ---
 
