@@ -6,7 +6,7 @@ REST API для системы расчёта и визуализации пар
 
 - **[🔧 Swagger UI + ReDoc (Комбо)](https://sandro302.github.io/portfolio/full.html)**
 - **[📖 ReDoc](https://sandro302.github.io/portfolio/index.html)**
-- **[🔧 Swagger UI](https://sandro302.github.io/portfolio/swagger.html)**
+- **[🔧 Swagger UI](https://sandro302.github.io/portfolio/docs/swagger.html)**
 
 ---
 
