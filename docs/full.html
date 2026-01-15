@@ -196,7 +196,7 @@
         });
 
         function initRedoc() {
-            Redoc.init('', {
+            Redoc.init('openapi.yaml', {
                 scrollYOffset: 100,
                 theme: {
                     colors: {
@@ -207,7 +207,6 @@
                 }
             }, document.getElementById('redoc-container'));
         }
-
         // Initialize Swagger on load
         initSwagger();
     </script>
