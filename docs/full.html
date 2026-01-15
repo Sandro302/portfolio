@@ -182,19 +182,18 @@
         }
 
         function initSwagger() {
-            swaggerUI = SwaggerUIBundle({
-                url: '..enapi.yaml',
-                dom_id: '#swagger-ui',
-                presets: [
-                    SwaggerUIBundle.presets.apis,
-                    SwaggerUIBundle.SwaggerUIStandalonePreset
-                ],
-                layout: "BaseLayout",
-                deepLinking: true,
-                defaultModelsExpandDepth: 1,
-                defaultModelExpandDepth: 1
-            });
-        }
+        swaggerUI = SwaggerUIBundle({
+            url: 'openapi.yaml', // лежит в той же папке, что и full.html
+            dom_id: '#swagger-ui',
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIBundle.SwaggerUIStandalonePreset
+            ],
+            layout: "BaseLayout",
+            deepLinking: true,
+            defaultModelsExpandDepth: 1,
+            defaultModelExpandDepth: 1
+        });
 
         function initRedoc() {
             Redoc.init('', {
