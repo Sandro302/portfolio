@@ -202,4 +202,3 @@ sudo dnf install -y telegram-desktop
 
 ---
 *Документация актуальна для: **Red OS 8.0***
-```
