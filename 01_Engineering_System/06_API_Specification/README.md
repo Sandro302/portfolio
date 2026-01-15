@@ -4,17 +4,7 @@ REST API для системы расчёта и визуализации пар
 
 ## 🚀 Документация
 
-### ⭐ Выберите удобный вариант:
-
-- **[🔧 Swagger UI + ReDoc (Комбо)](full.html)** — Обе в одном файле с вкладками
-  - Try It Out - прямое тестирование эндпоинтов
-  - Красивый обзор документации
-  - Как в SwaggerEditor!
-
-Или отдельно:
-
-- **[📚 ReDoc](index.html)** — Только чтение
-- **[🔧 Swagger UI](swagger.html)** — Только тестирование
+- **[Документация Swagger и ReDoc](https://sandro302.github.io/portfolio/index.html)**
 
 ---
 
@@ -30,7 +20,7 @@ curl -X POST https://api.example.com/v1/projects
 ### Основные эндпоинты
 
 | Метод | Endpoint | Описание |
-|-------|----------|---------|
+|-------|----------|----------|
 | GET | `/projects` | Список проектов |
 | POST | `/projects` | Создать проект |
 | POST | `/projects/import/olga` | Импортировать OLGA |
@@ -42,8 +32,8 @@ curl -X POST https://api.example.com/v1/projects
 
 ### Создание проекта
 ```bash
-curl -X POST https://api.example.com/v1/projects \
-  -H "Content-Type: application/json" \
+curl -X POST https://api.example.com/v1/projects \\
+  -H "Content-Type: application/json" \\
   -d '{
     "name": "Pipeline A",
     "description": "Main pipeline"
@@ -63,16 +53,16 @@ curl -X POST https://api.example.com/v1/projects \
 ### Импорт OLGA
 
 ```bash
-curl -X POST https://api.example.com/v1/projects/import/olga \
-  -F "name=Pipeline" \
+curl -X POST https://api.example.com/v1/projects/import/olga \\
+  -F "name=Pipeline" \\
   -F "files=@project.opi"
 ```
 
 ### Запуск расчёта
 
 ```bash
-curl -X POST https://api.example.com/v1/projects/proj_123/calculations \
-  -H "Content-Type: application/json" \
+curl -X POST https://api.example.com/v1/projects/proj_123/calculations \\
+  -H "Content-Type: application/json" \\
   -d '{
     "parametersOverride": {
       "iterations": 100
