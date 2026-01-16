@@ -150,21 +150,21 @@ sudo dnf install -y qt-creator libdrm \
 
 ---
 
-## 6. Установка и настройка PostgreSQL 15
+## 6. Установка и настройка PostgreSQL 16
 
 ### 6.1. Установка сервера и клиента
 ```bash
-sudo dnf install -y postgresql15-server postgresql15
+sudo dnf install -y postgresql16-server postgresql16
 ```
 
 ### 6.2. Инициализация базы данных
 ```bash
-sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
+sudo /usr/pgsql-15/bin/postgresql-16-setup initdb
 ```
 
 ### 6.3. Запуск и автозагрузка
 ```bash
-sudo systemctl enable --now postgresql-15
+sudo systemctl enable --now postgresql-16
 ```
 
 ### 6.4. Настройка пароля администратора
