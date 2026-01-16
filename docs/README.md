@@ -28,7 +28,7 @@ curl -X POST https://api.example.com/v1/projects
 | GET | `/projects/{id}/results` | Получить результаты |
 | POST | `/projects/{id}/export` | Экспорт в CSV |
 
-## 🔍 Примеры
+##  Примеры
 
 ### Создание проекта
 ```bash
@@ -75,7 +75,7 @@ curl -X POST https://api.example.com/v1/projects/proj_123/calculations \\
 curl -X GET https://api.example.com/v1/projects/proj_123/results
 ```
 
-📋 Теги API
+ Теги API
 
 | Тег           | Описание              |
 | ------------- | --------------------- |
